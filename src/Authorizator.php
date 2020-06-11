@@ -24,7 +24,6 @@ interface Authorizator
 	 */
 	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void;
 
-
 	/**
 	 * @return Transaction[]
 	 */
