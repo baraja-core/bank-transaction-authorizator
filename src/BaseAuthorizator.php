@@ -36,4 +36,28 @@ abstract class BaseAuthorizator implements Authorizator
 			}
 		}
 	}
+
+
+	/**
+	 * @param int[] $validVariables
+	 * @return Transaction[]
+	 */
+	public function getUnmatchedTransactions(array $validVariables): array
+	{
+		$return = [];
+		foreach ($this->getTransactions() as $transaction) {
+			$matched = false;
+			foreach ($validVariables as $currentVariable) {
+				if ($transaction->isVariableSymbol($currentVariable) === true) {
+					$matched = true;
+					break;
+				}
+			}
+			if ($matched === false) {
+				$return[] = $transaction;
+			}
+		}
+
+		return $return;
+	}
 }
