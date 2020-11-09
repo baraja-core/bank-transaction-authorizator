@@ -15,12 +15,6 @@ final class Helpers
 	}
 
 
-	/**
-	 * @param string $currentCurrency
-	 * @param string $expectedCurrency
-	 * @param float $price
-	 * @return float
-	 */
 	public static function convertCurrency(string $currentCurrency, string $expectedCurrency, float $price): float
 	{
 		// TODO: Reserved for future use.

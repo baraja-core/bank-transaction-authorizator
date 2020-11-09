@@ -19,8 +19,6 @@ interface Authorizator
 	 *
 	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
 	 * @param callable $callback (\Baraja\BankTransferAuthorizator\Transaction $transaction).
-	 * @param string $currency
-	 * @param float $tolerance
 	 */
 	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void;
 
