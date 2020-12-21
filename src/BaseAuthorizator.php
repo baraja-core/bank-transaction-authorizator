@@ -9,8 +9,8 @@ abstract class BaseAuthorizator implements Authorizator
 {
 
 	/**
-	 * @param int[]|float[] $unauthorizedVariables -> key is variable, value is expected price.
-	 * @param callable $callback with first argument of type Transaction.
+	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
+	 * @param callable&(callable(Transaction): void)[]; $callback with first argument of type Transaction.
 	 */
 	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void
 	{
