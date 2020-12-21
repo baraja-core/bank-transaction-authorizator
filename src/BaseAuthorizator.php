@@ -42,6 +42,13 @@ abstract class BaseAuthorizator implements Authorizator
 	 */
 	public function getUnmatchedTransactions(array $validVariables): array
 	{
+		if ((!$validVariables || array_keys($validVariables) === range(0, count($validVariables) - 1)) === false) {
+			throw new \InvalidArgumentException(
+				'The variables array must be associative.' . "\n"
+				. 'To solve this issue: Remove other values that are not valid variable symbols. You can do this, '
+				. 'for example, with the array_keys() function, or by modifying your algorithm to get a list of orders.'
+			);
+		}
 		$return = [];
 		foreach ($this->getTransactions() as $transaction) {
 			$matched = false;
