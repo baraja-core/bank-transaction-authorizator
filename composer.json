@@ -13,6 +13,7 @@
 		"nette/utils": "^3.0"
 	},
 	"require-dev": {
+		"baraja-core/currency-exchange-rate": "^1.1",
 		"phpstan/phpstan": "^0.12.18",
 		"tracy/tracy": "^2.7",
 		"phpstan/phpstan-nette": "^0.12.6",

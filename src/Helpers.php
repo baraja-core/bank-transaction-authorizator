@@ -13,12 +13,4 @@ final class Helpers
 	{
 		throw new \Error('Class ' . get_class($this) . ' is static and cannot be instantiated.');
 	}
-
-
-	public static function convertCurrency(string $currentCurrency, string $expectedCurrency, float $price): float
-	{
-		// TODO: Reserved for future use.
-
-		return $price;
-	}
 }

@@ -5,8 +5,14 @@ declare(strict_types=1);
 namespace Baraja\BankTransferAuthorizator;
 
 
+use Baraja\BankTransferAuthorizator\CurrencyConvertor\BarajaDefaultCurrencyConvertor;
+use Baraja\BankTransferAuthorizator\CurrencyConvertor\Convertor;
+use Baraja\CurrencyExchangeRate\CurrencyExchangeRateManager;
+
 abstract class BaseAuthorizator implements Authorizator
 {
+	private ?Convertor $currencyConvertor = null;
+
 
 	/**
 	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
@@ -16,9 +22,9 @@ abstract class BaseAuthorizator implements Authorizator
 	{
 		$variables = array_keys($unauthorizedVariables);
 
-		$process = static function (float $price, Transaction $transaction) use ($callback, $currency, $tolerance): void {
+		$process = function (float $price, Transaction $transaction) use ($callback, $currency, $tolerance): void {
 			if ($transaction->getCurrency() !== $currency) { // Fix different currencies
-				$price = Helpers::convertCurrency($transaction->getCurrency(), $currency, $price);
+				$price = $this->getCurrencyConvertor()->convert($transaction->getCurrency(), $currency, $price);
 			}
 			if ($transaction->getPrice() - $price >= -$tolerance) { // Is price in tolerance?
 				$callback($transaction);
@@ -64,5 +70,30 @@ abstract class BaseAuthorizator implements Authorizator
 		}
 
 		return $return;
+	}
+
+
+	public function getCurrencyConvertor(): Convertor
+	{
+		if ($this->currencyConvertor === null) {
+			if (\class_exists(CurrencyExchangeRateManager::class) === true) {
+				$this->currencyConvertor = new BarajaDefaultCurrencyConvertor;
+			} else {
+				throw new \LogicException(
+					'Currency convertor is not available.' . "\n"
+					. 'To solve this issue: Please implement your own class implementing "' . Convertor::class . '" '
+					. 'interface and register it to "' . \get_class($this) . '" '
+					. 'or install Composer package "baraja-core/currency-exchange-rate".'
+				);
+			}
+		}
+
+		return $this->currencyConvertor;
+	}
+
+
+	public function setCurrencyConvertor(Convertor $convertor): void
+	{
+		$this->currencyConvertor = $convertor;
 	}
 }
