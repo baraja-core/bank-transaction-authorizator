@@ -19,6 +19,9 @@
 		"phpstan/phpstan-nette": "^0.12.6",
 		"symplify/easy-coding-standard": "^7.2"
 	},
+	"suggest": {
+		"baraja-core/currency-exchange-rate": "For default currency convertor."
+	},
 	"autoload": {
 		"classmap": [
 			"src/"
