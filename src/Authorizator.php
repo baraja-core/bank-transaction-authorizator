@@ -20,7 +20,7 @@ interface Authorizator
 	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
 	 * @param callable $callback (\Baraja\BankTransferAuthorizator\Transaction $transaction).
 	 */
-	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void;
+	public function authOrders(array $unauthorizedVariables, callable $callback, ?string $currency = null, float $tolerance = 1.0): void;
 
 	/**
 	 * @return Transaction[]
@@ -32,4 +32,6 @@ interface Authorizator
 	 * @return Transaction[]
 	 */
 	public function getUnmatchedTransactions(array $validVariables): array;
+
+	public function getDefaultCurrency(): string;
 }

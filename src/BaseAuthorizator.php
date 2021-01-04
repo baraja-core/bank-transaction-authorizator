@@ -18,9 +18,12 @@ abstract class BaseAuthorizator implements Authorizator
 	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
 	 * @param callable&(callable(Transaction): void)[] $callback
 	 */
-	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void
+	public function authOrders(array $unauthorizedVariables, callable $callback, ?string $currency = null, float $tolerance = 1.0): void
 	{
 		$variables = array_keys($unauthorizedVariables);
+		if (!preg_match('/^[A-Z]{3}$/', $currency = strtoupper($currency ?? $this->getDefaultCurrency()))) {
+			throw new \InvalidArgumentException('Requested currency "' . $currency . '" is not valid.');
+		}
 
 		$process = function (float $price, Transaction $transaction) use ($callback, $currency, $tolerance): void {
 			if ($transaction->getCurrency() !== $currency) { // Fix different currencies
@@ -95,5 +98,11 @@ abstract class BaseAuthorizator implements Authorizator
 	public function setCurrencyConvertor(Convertor $convertor): void
 	{
 		$this->currencyConvertor = $convertor;
+	}
+
+
+	public function getDefaultCurrency(): string
+	{
+		return 'CZK';
 	}
 }
