@@ -26,4 +26,10 @@ interface Authorizator
 	 * @return Transaction[]
 	 */
 	public function getTransactions(): array;
+
+	/**
+	 * @param int[] $validVariables
+	 * @return Transaction[]
+	 */
+	public function getUnmatchedTransactions(array $validVariables): array;
 }
