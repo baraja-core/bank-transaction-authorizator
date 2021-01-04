@@ -8,12 +8,21 @@ namespace Baraja\BankTransferAuthorizator;
 final class MultiAuthorizator extends BaseAuthorizator
 {
 	/** @var Authorizator[] */
-	private array $authorizators = [];
+	private array $services;
 
 
-	public function addAuthorizator(Authorizator $authorizator): void
+	/**
+	 * @param Authorizator[] $services
+	 */
+	public function __construct(array $services = [])
 	{
-		$this->authorizators[] = $authorizator;
+		$this->services = $services;
+	}
+
+
+	public function addAuthorizator(Authorizator $service): void
+	{
+		$this->services[] = $service;
 	}
 
 
@@ -23,8 +32,8 @@ final class MultiAuthorizator extends BaseAuthorizator
 	 */
 	public function authOrders(array $unauthorizedVariables, callable $callback, string $currency = 'CZK', float $tolerance = 1.0): void
 	{
-		foreach ($this->authorizators as $authorizator) {
-			$authorizator->authOrders($unauthorizedVariables, $callback, $currency, $tolerance);
+		foreach ($this->services as $service) {
+			$service->authOrders($unauthorizedVariables, $callback, $currency, $tolerance);
 		}
 	}
 
@@ -35,11 +44,11 @@ final class MultiAuthorizator extends BaseAuthorizator
 	public function getTransactions(): array
 	{
 		$return = [];
-		foreach ($this->authorizators as $authorizator) {
-			$return[] = $authorizator->getTransactions();
+		foreach ($this->services as $service) {
+			$return[] = $service->getTransactions();
 		}
 
-		return array_merge([], ... $return);
+		return array_merge([], ...$return);
 	}
 
 
@@ -50,10 +59,10 @@ final class MultiAuthorizator extends BaseAuthorizator
 	public function getUnmatchedTransactions(array $validVariables): array
 	{
 		$return = [];
-		foreach ($this->authorizators as $authorizator) {
-			$return[] = $authorizator->getUnmatchedTransactions($validVariables);
+		foreach ($this->services as $service) {
+			$return[] = $service->getUnmatchedTransactions($validVariables);
 		}
 
-		return array_merge([], ... $return);
+		return array_merge([], ...$return);
 	}
 }
