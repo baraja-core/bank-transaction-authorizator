@@ -11,7 +11,7 @@ interface Transaction
 
 	public function getPrice(): float;
 
-	public function isVariableSymbol(int $variable): bool;
+	public function isVariableSymbol(int $vs): bool;
 
-	public function isContainVariableSymbolInMessage(int $variableSymbol): bool;
+	public function isContainVariableSymbolInMessage(int $vs): bool;
 }
