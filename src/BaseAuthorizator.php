@@ -56,7 +56,10 @@ abstract class BaseAuthorizator implements Authorizator
 	 */
 	public function getUnmatchedTransactions(array $validVariables): array
 	{
-		if (($validVariables !== [] || array_keys($validVariables) === range(0, count($validVariables) - 1)) === false) {
+		if ($validVariables === []) {
+			return [];
+		}
+		if (array_keys($validVariables) !== range(0, count($validVariables) - 1)) {
 			throw new \InvalidArgumentException(
 				'The variables array must be associative.' . "\n"
 				. 'To solve this issue: Remove other values that are not valid variable symbols. You can do this, '
