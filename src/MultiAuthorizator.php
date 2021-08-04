@@ -27,7 +27,7 @@ final class MultiAuthorizator extends BaseAuthorizator
 
 
 	/**
-	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
+	 * @param array<string|int, int|float> $unauthorizedVariables (variable => expectedPrice)
 	 * @param callable $callback (\Baraja\BankTransferAuthorizator\Transaction $transaction).
 	 */
 	public function authOrders(

@@ -15,7 +15,7 @@ abstract class BaseAuthorizator implements Authorizator
 
 
 	/**
-	 * @param int[]|float[] $unauthorizedVariables (variable => expectedPrice)
+	 * @param array<string|int, int|float> $unauthorizedVariables (variable => expectedPrice)
 	 * @param callable&(callable(Transaction): void)[] $callback
 	 */
 	public function authOrders(
@@ -25,7 +25,8 @@ abstract class BaseAuthorizator implements Authorizator
 		float $tolerance = 1.0
 	): void {
 		$variables = array_keys($unauthorizedVariables);
-		if (!preg_match('/^[A-Z]{3}$/', $currency = strtoupper($currency ?? $this->getDefaultCurrency()))) {
+		$currency = strtoupper($currency ?? $this->getDefaultCurrency());
+		if (preg_match('/^[A-Z]{3}$/', $currency) !== 1) {
 			throw new \InvalidArgumentException('Requested currency "' . $currency . '" is not valid.');
 		}
 
