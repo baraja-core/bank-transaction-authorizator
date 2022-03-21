@@ -22,7 +22,7 @@ abstract class BaseAuthorizator implements Authorizator
 		array $unauthorizedVariables,
 		callable $callback,
 		?string $currency = null,
-		float $tolerance = 1.0
+		float $tolerance = 1.0,
 	): void {
 		$variables = array_keys($unauthorizedVariables);
 		$currency = strtoupper($currency ?? $this->getDefaultCurrency());

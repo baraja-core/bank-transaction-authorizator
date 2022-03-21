@@ -34,7 +34,7 @@ final class MultiAuthorizator extends BaseAuthorizator
 		array $unauthorizedVariables,
 		callable $callback,
 		?string $currency = null,
-		float $tolerance = 1.0
+		float $tolerance = 1.0,
 	): void {
 		foreach ($this->services as $service) {
 			$service->authOrders($unauthorizedVariables, $callback, $currency, $tolerance);

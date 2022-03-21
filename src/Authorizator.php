@@ -23,7 +23,7 @@ interface Authorizator
 		array $unauthorizedVariables,
 		callable $callback,
 		?string $currency = null,
-		float $tolerance = 1.0
+		float $tolerance = 1.0,
 	): void;
 
 	/**
