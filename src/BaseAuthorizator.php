@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Baraja\BankTransferAuthorizator;
 
 
-use Baraja\BankTransferAuthorizator\CurrencyConvertor\BarajaDefaultCurrencyConvertor;
 use Baraja\BankTransferAuthorizator\CurrencyConvertor\Convertor;
-use Baraja\CurrencyExchangeRate\CurrencyExchangeRateManager;
+use Baraja\BankTransferAuthorizator\CurrencyConvertor\ExchangeRateConvertorBridge;
+use Baraja\Shop\Currency\ExchangeRateConvertor;
 
 abstract class BaseAuthorizator implements Authorizator
 {
+	protected ?ExchangeRateConvertor $exchangeRateConvertor = null;
 	private ?Convertor $currencyConvertor = null;
 
 
@@ -32,7 +33,7 @@ abstract class BaseAuthorizator implements Authorizator
 
 		$process = function (float $price, Transaction $transaction) use ($callback, $currency, $tolerance): void {
 			if ($transaction->getCurrency() !== $currency) { // Fix different currencies
-				$price = $this->getCurrencyConvertor()->convert($transaction->getCurrency(), $currency, $price);
+				$price = (float) $this->getCurrencyConvertor()->convert((string) $price, $transaction->getCurrency(), $currency);
 			}
 			if ($transaction->getPrice() - $price >= -$tolerance) { // Is price in tolerance?
 				$callback($transaction);
@@ -87,14 +88,14 @@ abstract class BaseAuthorizator implements Authorizator
 	public function getCurrencyConvertor(): Convertor
 	{
 		if ($this->currencyConvertor === null) {
-			if (\class_exists(CurrencyExchangeRateManager::class) === true) {
-				$this->currencyConvertor = new BarajaDefaultCurrencyConvertor;
+			if ($this->exchangeRateConvertor !== null) {
+				$this->currencyConvertor = new ExchangeRateConvertorBridge($this->exchangeRateConvertor);
 			} else {
 				throw new \LogicException(
 					'Currency convertor is not available.' . "\n"
 					. 'To solve this issue: Please implement your own class implementing "' . Convertor::class . '" '
 					. 'interface and register it to "' . static::class . '" '
-					. 'or install Composer package "baraja-core/currency-exchange-rate".',
+					. 'or install Composer package "baraja-core/currency".',
 				);
 			}
 		}
@@ -112,5 +113,11 @@ abstract class BaseAuthorizator implements Authorizator
 	public function getDefaultCurrency(): string
 	{
 		return 'CZK';
+	}
+
+
+	public function setExchangeRateConvertor(ExchangeRateConvertor $exchangeRateConvertor): void
+	{
+		$this->exchangeRateConvertor = $exchangeRateConvertor;
 	}
 }

@@ -10,10 +10,10 @@
 	],
 	"require": {
 		"php": "^8.0",
-		"nette/utils": "^3.2"
+		"nette/utils": "^3.2",
+		"baraja-core/currency": "^2.0"
 	},
 	"require-dev": {
-		"baraja-core/currency-exchange-rate": "^2.0",
 		"tracy/tracy": "^2.8",
 		"phpstan/phpstan": "^1.0",
 		"phpstan/extension-installer": "^1.1",
@@ -22,9 +22,6 @@
 		"phpstan/phpstan-strict-rules": "^1.0",
 		"spaze/phpstan-disallowed-calls": "^2.0",
 		"roave/security-advisories": "dev-master"
-	},
-	"suggest": {
-		"baraja-core/currency-exchange-rate": "For default currency convertor."
 	},
 	"autoload": {
 		"classmap": [

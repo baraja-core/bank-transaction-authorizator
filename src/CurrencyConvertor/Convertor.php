@@ -7,5 +7,9 @@ namespace Baraja\BankTransferAuthorizator\CurrencyConvertor;
 
 interface Convertor
 {
-	public function convert(string $currentCurrency, string $expectedCurrency, float $price): float;
+	/**
+	 * @param numeric-string $price
+	 * @return numeric-string
+	 */
+	public function convert(string $price, string $source, string $target): string;
 }
